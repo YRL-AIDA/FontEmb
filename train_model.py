@@ -78,6 +78,8 @@ train_index, val_index = split_index_train_val(dataset, batch_size=256, shuffle=
 with open(LOG_FILE, "w") as f:
     f.write("START_LEANING\n")
 
+top_loss = 1
+
 for epoch in range(num_epochs):
     model1.train()
     model_diff.train()
@@ -93,8 +95,14 @@ for epoch in range(num_epochs):
             print(f"Epoch [{epoch + 1}/{num_epochs}], Batch [{i + 1}/{len(train_index)}], Loss: {train_loss:.4f}", end = '\r')
 
     val_loss = 0.0
-    for i, (batch_index) in enumerate(val_index):
+    for i, (batch_index) in enumerate(val_index):   
         val_loss += validation([dataset[j] for j in batch_index])
+    val_loss = val_loss/len(val_index)
+    if val_loss < top_loss:
+        top_loss = val_loss
+        name_loss = f"loss_{int(top_loss*100)}"
+        torch.save(model1.state_dict(), f'model1_{name_loss}.pt')
+        torch.save(model_diff.state_dict(), f'model_diff_{name_loss}.pt')
 
     with open(LOG_FILE, "a") as f:
-        f.write(f"Epoch [{epoch + 1}/{num_epochs}], Loss: [train: {running_loss/len(train_index):.4f} / val: {val_loss/len(val_index): .4f} ] \n")
+        f.write(f"Epoch [{epoch + 1}/{num_epochs}], Loss: [train: {running_loss/len(train_index):.4f} / val: {val_loss: .4f} ] \n")

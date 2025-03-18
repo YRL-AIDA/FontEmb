@@ -175,3 +175,5 @@ cython_debug/
 
 dataset
 log.train.txt
+test_img.png
+*.pt
