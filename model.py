@@ -12,10 +12,12 @@ from torch.utils.data import Dataset
 def label_to_vec(text):
     return torch.Tensor([float(text[0])])
 
+
 def image_to_gray(image_left, image_right):
     grayscale_image_1 = cv2.cvtColor(image_left, cv2.COLOR_BGR2GRAY) / 255.0
     grayscale_image_2 = cv2.cvtColor(image_right, cv2.COLOR_BGR2GRAY) / 255.0
-    return np.array([grayscale_image_1, grayscale_image_2]) # размерность канала
+    return np.array([grayscale_image_1, grayscale_image_2])
+
 
 class CharImageDataset(Dataset):
     def __init__(self, img_dir, transform=image_to_gray, target_transform=label_to_vec):
@@ -33,12 +35,12 @@ class CharImageDataset(Dataset):
         label, i = self.__get_label_and_i_from_idx(idx)
         img_path = os.path.join(self.img_dir, label, f"image_{i}.png")
         image = Image.open(img_path)
-        image_left = np.array(image.crop([0,0,120,60])) # левая картинка
-        image_right = np.array(image.crop([120,0,240,60])) # правая картинка
+        image_left = np.array(image.crop([0, 0, 120, 60])) # левая картинка
+        image_right = np.array(image.crop([120, 0, 240, 60])) # правая картинка
         images = self.transform(image_left, image_right) if self.transform else np.array([image_left, image_right])
         if self.target_transform:
             label = self.target_transform(label)
-        return torch.Tensor(images).unsqueeze(1) , label
+        return torch.Tensor(images).unsqueeze(1), label
 
     def __get_label_and_i_from_idx(self, idx):
         k = 0
@@ -46,8 +48,6 @@ class CharImageDataset(Dataset):
             idx -= self.counts[k]
             k += 1
         return self.labels[k], idx
-
-
 
 
 class SubCharCNNClassifier(nn.Module):

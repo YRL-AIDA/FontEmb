@@ -4,8 +4,10 @@ from PIL import Image
 import numpy as np
 from model import image_to_gray, ModelDiff, SubCharCNNClassifier
 import torch
-name_model1 = "model1_loss_29.pt"
-name_diff_model = "model_diff_loss_29.pt"
+
+name_model1 = "model1_loss_69.pt"
+name_diff_model = "model_diff_loss_69.pt"
+
 
 def classifier(model1, model_diff, char_left, char_right):
     gray_image = image_to_gray(char_left, char_right)
@@ -73,9 +75,6 @@ for i in range(100):
     
     v = classifier(model1, diff_model, char_left, char_right)
     V.append(v.tolist()>0.5)
-
-
-
 
 
 print(np.mean(V))
