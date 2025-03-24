@@ -109,7 +109,7 @@ class VariableFontImgGenerator:
         final_image.paste(images[1], (images[0].width, 0))
         final_image.save(name_img)
 
-# # Проверка
+# Проверка
 # generator = VariableFontImgGenerator()
 # generator.generate_images('output.png', style=True)  # одинаковый шрифт
 # generator.generate_images('output.png', same_text=True)  # одинаковый текст
