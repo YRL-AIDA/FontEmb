@@ -7,7 +7,7 @@ PATH_FONTS = os.path.join(os.path.dirname(__file__), '..', 'fonts')
 
 
 class FontImgGenerator:
-    def __init__(self, size_img=(120, 60), font_size=40):
+    def __init__(self, size_img=(60, 60), font_size=40):
         self.fonts = [os.path.join(PATH_FONTS, name) for name in os.listdir(PATH_FONTS)]
 
         self.image_size = size_img

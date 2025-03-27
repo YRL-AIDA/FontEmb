@@ -7,7 +7,7 @@ PATH_FONTS = os.path.join(os.path.dirname(__file__), '..', 'variable_fonts')
 
 
 class VariableFontImgGenerator:
-    def __init__(self, size_img=(120, 60), font_size=40):
+    def __init__(self, size_img=(60, 60), font_size=40):
         self.fonts = [os.path.join(PATH_FONTS, name) for name in os.listdir(PATH_FONTS)]
         self.image_size = size_img
         self.font_size = font_size
@@ -110,7 +110,7 @@ class VariableFontImgGenerator:
         final_image.save(name_img)
 
 # Проверка
-# generator = VariableFontImgGenerator()
-# generator.generate_images('output.png', style=True)  # одинаковый шрифт
-# generator.generate_images('output.png', same_text=True)  # одинаковый текст
-# generator.generate_images('output.png')  # все разное
+generator = VariableFontImgGenerator()
+generator.generate_images('output.png', style=True)  # одинаковый шрифт
+generator.generate_images('output.png', same_text=True)  # одинаковый текст
+generator.generate_images('output.png')  # все разное
