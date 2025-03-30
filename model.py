@@ -35,8 +35,8 @@ class CharImageDataset(Dataset):
         label, i = self.__get_label_and_i_from_idx(idx)
         img_path = os.path.join(self.img_dir, label, f"image_{i}.png")
         image = Image.open(img_path)
-        image_left = np.array(image.crop([0, 0, 120, 60])) # левая картинка
-        image_right = np.array(image.crop([120, 0, 240, 60])) # правая картинка
+        image_left = np.array(image.crop([0, 0, 40, 40])) # левая картинка
+        image_right = np.array(image.crop([40, 0, 80, 40])) # правая картинка
         images = self.transform(image_left, image_right) if self.transform else np.array([image_left, image_right])
         if self.target_transform:
             label = self.target_transform(label)
@@ -62,7 +62,7 @@ class SubCharCNNClassifier(nn.Module):
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
 
         # полносвязный слой
-        self.fc1 = nn.Linear(32 * 15 * 30, 128) 
+        self.fc1 = nn.Linear(32 * 10 * 10, 128)
 
         # функция активации
         self.relu = nn.ReLU()
