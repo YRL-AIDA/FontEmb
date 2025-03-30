@@ -1,3 +1,5 @@
+import os
+
 from model import SubCharCNNClassifier, ModelDiff, CharImageDataset
 from torch.utils.data import DataLoader
 from torch import optim
@@ -6,6 +8,7 @@ from torch.nn import BCEWithLogitsLoss
 import numpy as np
 
 device = torch.device('cuda:0' if torch.cuda.device_count() != 0 else 'cpu')
+
 
 def split_index_train_val(dataset, val_split=0.1, shuffle=True, seed=1234,batch_size=64):
     N = len(dataset)
@@ -38,6 +41,7 @@ def validation(batch):
     loss = criterion(sameness, targets).to(device)
     return loss.item()
 
+
 def train_step(batch):
     optimizer.zero_grad()
     left_img = torch.cat([b[0][0].unsqueeze(0) for b in batch], dim=0).to(device)
@@ -60,6 +64,8 @@ def train_step(batch):
 
 
 LOG_FILE = "log.train.txt"
+MODEL1_FILE = "model1.pt"
+MODEL_DIFF_FILE = "model_diff1.pt"
 num_epochs = 20
 
 model1 = SubCharCNNClassifier().to(device)
@@ -71,7 +77,7 @@ criterion = BCEWithLogitsLoss().to(device)
 # optimizer = optim.Adam(list(model1.parameters()) + list(model2.parameters()) + list(model_diff.parameters()), lr=0.001)
 optimizer = optim.Adam(list(model1.parameters()) + list(model_diff.parameters()), lr=0.001)
 
-dataset = CharImageDataset("dataset/") 
+dataset = CharImageDataset("dataset1/")
 train_index, val_index = split_index_train_val(dataset, batch_size=256, shuffle=True)
 
 
@@ -95,14 +101,20 @@ for epoch in range(num_epochs):
             print(f"Epoch [{epoch + 1}/{num_epochs}], Batch [{i + 1}/{len(train_index)}], Loss: {train_loss:.4f}", end = '\r')
 
     val_loss = 0.0
-    for i, (batch_index) in enumerate(val_index):   
+    for i, (batch_index) in enumerate(val_index):
         val_loss += validation([dataset[j] for j in batch_index])
-    val_loss = val_loss/len(val_index)
+    val_loss = val_loss / len(val_index)
+
     if val_loss < top_loss:
         top_loss = val_loss
-        name_loss = f"loss_{int(top_loss*100)}"
-        torch.save(model1.state_dict(), f'model1_{name_loss}.pt')
-        torch.save(model_diff.state_dict(), f'model_diff_{name_loss}.pt')
+
+        if os.path.exists(MODEL1_FILE):
+            os.remove(MODEL1_FILE)
+        if os.path.exists(MODEL_DIFF_FILE):
+            os.remove(MODEL_DIFF_FILE)
+
+        torch.save(model1.state_dict(), MODEL1_FILE)
+        torch.save(model_diff.state_dict(), MODEL_DIFF_FILE)
 
     with open(LOG_FILE, "a") as f:
         f.write(f"Epoch [{epoch + 1}/{num_epochs}], Loss: [train: {running_loss/len(train_index):.4f} / val: {val_loss: .4f} ] \n")
