@@ -77,7 +77,7 @@ criterion = BCEWithLogitsLoss().to(device)
 # optimizer = optim.Adam(list(model1.parameters()) + list(model2.parameters()) + list(model_diff.parameters()), lr=0.001)
 optimizer = optim.Adam(list(model1.parameters()) + list(model_diff.parameters()), lr=0.001)
 
-dataset = CharImageDataset("dataset1/")
+dataset = CharImageDataset("dataset/")
 train_index, val_index = split_index_train_val(dataset, batch_size=256, shuffle=True)
 
 

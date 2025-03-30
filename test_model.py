@@ -6,8 +6,8 @@ import os
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 
-name_model1 = "model2.pt"
-name_diff_model = "model_diff2.pt"
+name_model1 = "model1.pt"
+name_diff_model = "model_diff1.pt"
 
 model1 = SubCharCNNClassifier()
 model1.load_state_dict(torch.load(name_model1, map_location=torch.device('cpu')))

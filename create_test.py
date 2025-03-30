@@ -7,10 +7,10 @@ if __name__ == '__main__':
     COUNT_IMAGES_0 = COUNT_IMAGES // 2
     COUNT_IMAGES_1 = COUNT_IMAGES // 2
 
-    font_generator = VariableFontImgGenerator()
-    os.mkdir('test1')
-    path_0 = os.path.join('test1', '0')
-    path_1 = os.path.join('test1', '1')
+    font_generator = FontImgGenerator()
+    os.mkdir('test')
+    path_0 = os.path.join('test', '0')
+    path_1 = os.path.join('test', '1')
     os.mkdir(path_0)
     os.mkdir(path_1)
 
