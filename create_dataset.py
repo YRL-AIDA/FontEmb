@@ -1,4 +1,5 @@
-from utils import FontImgGenerator
+from utils import FontImgGenerator # Шрифты без свойств
+from utils import VariableFontImgGenerator
 import os
 
 if __name__ == '__main__':

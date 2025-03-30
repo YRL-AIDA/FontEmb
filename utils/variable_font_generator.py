@@ -1,7 +1,7 @@
 import os
 import random
 from PIL import Image, ImageDraw, ImageFont
-from text_generator import StringGenerator
+from .text_generator import StringGenerator
 
 PATH_FONTS = os.path.join(os.path.dirname(__file__), '..', 'variable_fonts')
 
