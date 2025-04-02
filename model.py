@@ -62,7 +62,8 @@ class SubCharCNNClassifier(nn.Module):
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
 
         # полносвязный слой
-        self.fc1 = nn.Linear(32 * 10 * 10, 128)
+        self.fc1 = nn.Linear(32 * 10 * 10, 64)
+        self.fc2 = nn.Linear(64, 8)
 
         # функция активации
         self.relu = nn.ReLU()
@@ -77,6 +78,7 @@ class SubCharCNNClassifier(nn.Module):
 
         # применяем полносвязный слой и relu
         x = self.relu(self.fc1(x))  # (batch_size, 128)
+        x = self.relu(self.fc2(x))  # (batch_size, 64)
 
         return x
 
@@ -84,12 +86,12 @@ class SubCharCNNClassifier(nn.Module):
 class ModelDiff(nn.Module):
     def __init__(self):
         super(ModelDiff, self).__init__()
-        self.fc1 = nn.Linear(128 * 2, 128)  
-        self.fc2 = nn.Linear(128, 1)  
+        self.fc1 = nn.Linear(8 * 2, 16)  
+        self.fc2 = nn.Linear(16, 1)  
         self.relu = nn.ReLU()
 
     def forward(self, emb_left, emb_right):
-        x = torch.cat((emb_left, emb_right), dim=1)  # (batch_size, 256)
-        x = self.relu(self.fc1(x))  # (batch_size, 128)
+        x = torch.cat((emb_left, emb_right), dim=1)  # (batch_size, 16)
+        x = self.relu(self.fc1(x))  # (batch_size, 16)
         x = self.fc2(x)  # (batch_size, 1)
         return x

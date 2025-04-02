@@ -1,7 +1,9 @@
 import os
 import random
 from PIL import Image, ImageDraw, ImageFont
-from text_generator import StringGenerator
+from .text_generator import StringGenerator
+import cv2
+import numpy as np
 
 PATH_FONTS = os.path.join(os.path.dirname(__file__), '..', 'variable_fonts')
 
@@ -44,8 +46,8 @@ class BoldImgGenerator:
         background = self.random_saturated_color(backcolor=True)
         image = Image.new('RGB', image_size, background)
         draw = ImageDraw.Draw(image)
-
-        font = ImageFont.truetype(font_path, font_size)
+        fs = font_size + random.randint(-10, 10)  # Размер шрифта с возможным отклонением
+        font = ImageFont.truetype(font_path, fs)
 
         # жирность
         if hasattr(font, 'set_variation_by_axes'):
@@ -67,7 +69,11 @@ class BoldImgGenerator:
             underline_position = (bbox[0], bbox[3] + 5)  # Положение линии под текстом (5 пикселей ниже)
             draw.line([bbox[0], underline_position[1], bbox[2], underline_position[1]], fill='black', width=2)
 
-        return image
+        size = random.randint(10, 40)
+        image = cv2.resize(np.array(image), (size, size), cv2.INTER_LANCZOS4)
+        image = cv2.resize(image, (40, 40), cv2.INTER_LANCZOS4)
+
+        return  Image.fromarray(image.astype('uint8'), 'RGB')
 
     def generate_random_style(self):
         # случайная комбинация стилей
@@ -100,7 +106,7 @@ class BoldImgGenerator:
 
 
 # Проверка
-generator = BoldImgGenerator()
-generator.generate_images('output.png', bold=True)  # жирные
+#generator = BoldImgGenerator()
+#generator.generate_images('output.png', bold=True)  # жирные
 # generator.generate_images('output.png', bold=False)  # нежирные
 # generator.generate_images('output.png')  # все разное

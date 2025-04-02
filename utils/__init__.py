@@ -1,3 +1,4 @@
 from .text_generator import text_generator
 from .font_img_generator import FontImgGenerator
 from .variable_font_generator import VariableFontImgGenerator
+from .bold_img_generator import BoldImgGenerator
