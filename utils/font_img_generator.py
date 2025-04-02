@@ -4,15 +4,17 @@ from PIL import Image, ImageDraw, ImageFont
 from .text_generator import StringGenerator
 
 PATH_FONTS = os.path.join(os.path.dirname(__file__), '..', 'fonts')
+
+
 class FontImgGenerator:
-    def __init__(self, size_img=(120, 60), font_size=40):
+    def __init__(self, size_img=(40, 40), font_size=35):
         self.fonts = [os.path.join(PATH_FONTS, name) for name in os.listdir(PATH_FONTS)]
 
         self.image_size = size_img
         self.font_size = font_size
         self.intervals = [
-            (-10, 10),  # отклонение по ширине
-            (-20, 10)  # отклонение по высоте
+            (-3, 3),  # отклонение по ширине
+            (-3, 3)  # отклонение по высоте
         ]
 
     def random_position_with_constraints(self):

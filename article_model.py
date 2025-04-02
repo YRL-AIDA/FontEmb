@@ -35,8 +35,8 @@ class CharImageDataset(Dataset):
         label, i = self.__get_label_and_i_from_idx(idx)
         img_path = os.path.join(self.img_dir, label, f"image_{i}.png")
         image = Image.open(img_path)
-        image_left = np.array(image.crop([0, 0, 40, 40])) # левая картинка
-        image_right = np.array(image.crop([40, 0, 80, 40])) # правая картинка
+        image_left = np.array(image.crop([0, 0, 40, 40]))  # левая картинка
+        image_right = np.array(image.crop([40, 0, 80, 40]))  # правая картинка
         images = self.transform(image_left, image_right) if self.transform else np.array([image_left, image_right])
         if self.target_transform:
             label = self.target_transform(label)
@@ -50,13 +50,16 @@ class CharImageDataset(Dataset):
         return self.labels[k], idx
 
 
-class SubCharCNNClassifier(nn.Module):
+class ArticleCNNClassifier(nn.Module):
     def __init__(self):
-        super(SubCharCNNClassifier, self).__init__()
-        
+        super(ArticleCNNClassifier, self).__init__()
+
         # сверточные слои
         self.conv1 = nn.Conv2d(in_channels=1, out_channels=16, kernel_size=3, stride=1, padding=1)
-        self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1)
+
+        self.conv3 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=1)
+        self.conv4 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1)
 
         # максимальный пулинг
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
@@ -69,27 +72,21 @@ class SubCharCNNClassifier(nn.Module):
 
     def forward(self, x):
         # применяем свертки и пулинг
-        x = self.pool(self.relu(self.conv1(x)))  # (batch_size, 16, 30, 120)
-        x = self.pool(self.relu(self.conv2(x)))  # (batch_size, 32, 15, 60)
+        x = self.relu(self.conv1(x))  # (batch_size, 16, 40, 40)
+        x = self.relu(self.conv2(x))  # (batch_size,  16, 40, 40)
+
+        x = self.pool(x)
+
+        x = self.relu(self.conv3(x))  # (batch_size, 32, 20, 20)
+        x = self.relu(self.conv4(x))  # (batch_size, 32, 20, 20)
+
+        x = self.pool(x)
 
         # делаем вектор одномерным для fc1
-        x = x.view(x.size(0), -1)  # (batch_size, 32 * 15 * 60)
+        x = x.view(x.size(0), -1)  # (batch_size, 32 * 10 * 10)
 
         # применяем полносвязный слой и relu
         x = self.relu(self.fc1(x))  # (batch_size, 128)
 
         return x
 
-
-class ModelDiff(nn.Module):
-    def __init__(self):
-        super(ModelDiff, self).__init__()
-        self.fc1 = nn.Linear(128 * 2, 128)  
-        self.fc2 = nn.Linear(128, 1)  
-        self.relu = nn.ReLU()
-
-    def forward(self, emb_left, emb_right):
-        x = torch.cat((emb_left, emb_right), dim=1)  # (batch_size, 256)
-        x = self.relu(self.fc1(x))  # (batch_size, 128)
-        x = self.fc2(x)  # (batch_size, 1)
-        return x
