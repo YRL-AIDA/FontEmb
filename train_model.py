@@ -1,6 +1,7 @@
 import os
 
 from model import SubCharCNNClassifier, ModelDiff, CharImageDataset
+from article_model import ArticleCNNClassifier
 from torch.utils.data import DataLoader
 from torch import optim
 import torch
@@ -64,11 +65,11 @@ def train_step(batch):
 
 
 LOG_FILE = "log.train.txt"
-MODEL1_FILE = "model1.pt"
-MODEL_DIFF_FILE = "model_diff1.pt"
+MODEL1_FILE = "article_model2.pt"
+MODEL_DIFF_FILE = "article_model_diff2.pt"
 num_epochs = 20
 
-model1 = SubCharCNNClassifier().to(device)
+model1 = ArticleCNNClassifier().to(device)
 # model2 = SubCharCNNClassifier()
 model_diff = ModelDiff().to(device)
 
