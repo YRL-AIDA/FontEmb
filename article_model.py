@@ -65,7 +65,8 @@ class ArticleCNNClassifier(nn.Module):
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
 
         # полносвязный слой
-        self.fc1 = nn.Linear(32 * 10 * 10, 128)
+        self.fc1 = nn.Linear(32 * 10 * 10, 64)
+        self.fc2 = nn.Linear(64, 8)
 
         # функция активации
         self.relu = nn.ReLU()
@@ -86,7 +87,8 @@ class ArticleCNNClassifier(nn.Module):
         x = x.view(x.size(0), -1)  # (batch_size, 32 * 10 * 10)
 
         # применяем полносвязный слой и relu
-        x = self.relu(self.fc1(x))  # (batch_size, 128)
+        x = self.relu(self.fc1(x))  # (batch_size, 64)
+        x = self.relu(self.fc2(x))
 
         return x
 
