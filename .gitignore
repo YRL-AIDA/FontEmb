@@ -177,6 +177,8 @@ dataset
 dataset1
 test
 test1
+test2
 log.train.txt
 test_img.png
 *.pt
+
