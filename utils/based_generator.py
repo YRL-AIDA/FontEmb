@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 import random
 
 class BasedGenerator(ABC):
@@ -21,3 +21,7 @@ class BasedGenerator(ABC):
         x = random.randint(x_interval[0], x_interval[1])
         y = random.randint(y_interval[0], y_interval[1])
         return (x, y)
+
+    @abstractmethod
+    def draw_font(self):
+        pass

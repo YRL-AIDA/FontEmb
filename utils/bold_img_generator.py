@@ -4,11 +4,12 @@ from PIL import Image, ImageDraw, ImageFont
 from .text_generator import StringGenerator
 import cv2
 import numpy as np
+from .based_generator import BasedGenerator
 
 PATH_FONTS = os.path.join(os.path.dirname(__file__), '..', 'variable_fonts')
 
 
-class BoldImgGenerator:
+class BoldImgGenerator(BasedGenerator):
     def __init__(self, size_img=(40, 40), font_size=35):
         self.fonts = [os.path.join(PATH_FONTS, name) for name in os.listdir(PATH_FONTS)]
         self.image_size = size_img
@@ -22,27 +23,7 @@ class BoldImgGenerator:
         self.strike = [True, False]  # зачеркивание
         self.underline = [True, False]  # подчеркивание
 
-    def random_saturated_color(self, backcolor=False):
-        # Генерация случайных значений для R, G, B
-        r = random.randint(0, 127)
-        g = random.randint(0, 127)
-        b = random.randint(0, 127)
-
-        if max(r, g, b) - min(r, g, b) < 50:
-            if random.choice([True, False]):
-                r = random.choice([0, 127])
-            else:
-                g = random.choice([0, 127])
-
-        return (r, g, b) if not backcolor else (255 - r // 4, 255 - g // 4, 255 - b // 4)
-
-    def random_position_with_constraints(self):
-        x_interval, y_interval = self.intervals
-        x = random.randint(x_interval[0], x_interval[1])
-        y = random.randint(y_interval[0], y_interval[1])
-        return (x, y)
-
-    def draw_variable_font(self, text, font_path, image_size, font_size, weight, strike, underline):
+    def draw_font(self, text, font_path, image_size, font_size, weight, strike, underline):
         background = self.random_saturated_color(backcolor=True)
         image = Image.new('RGB', image_size, background)
         draw = ImageDraw.Draw(image)
@@ -90,16 +71,16 @@ class BoldImgGenerator:
             weight = 800
             text = StringGenerator.text_generator(lang)
             font_path, strike, underline = self.generate_random_style()
-            image = self.draw_variable_font(text, font_path, self.image_size, self.font_size, weight,
+            image = self.draw_font(text, font_path, self.image_size, self.font_size, weight,
                                             strike, underline)
-            print(font_path)
+            # print(font_path)
 
         # нежирные
         else:
             weight = 400
             font_path, strike, underline = self.generate_random_style()
             text = StringGenerator.text_generator(lang)
-            image = self.draw_variable_font(text, font_path, self.image_size, self.font_size, weight,
+            image = self.draw_font(text, font_path, self.image_size, self.font_size, weight,
                                             strike, underline)
 
         image.save(name_img)

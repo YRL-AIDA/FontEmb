@@ -1,8 +1,10 @@
 import os
 import random
+import cv2
+import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 from .text_generator import StringGenerator
-from based_generator import BasedGenerator
+from .based_generator import BasedGenerator
 
 PATH_FONTS = os.path.join(os.path.dirname(__file__), '..', 'fonts')
 
@@ -29,7 +31,11 @@ class FontImgGenerator(BasedGenerator):
 
         draw.text(position, text, fill='black', font=font)
 
-        return image
+        size = random.randint(10, 40)
+        image = cv2.resize(np.array(image), (size, size), cv2.INTER_LANCZOS4)
+        image = cv2.resize(image, (40, 40), cv2.INTER_LANCZOS4)
+
+        return Image.fromarray(image.astype('uint8'), 'RGB')
 
     def generate_images(self, name_img, style=False, same_text=False):
         lang = random.choice(['rus', 'eng'])

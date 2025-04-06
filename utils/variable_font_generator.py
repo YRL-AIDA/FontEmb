@@ -1,8 +1,10 @@
 import os
 import random
+import cv2
+import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 from .text_generator import StringGenerator
-from based_generator import BasedGenerator
+from .based_generator import BasedGenerator
 
 PATH_FONTS = os.path.join(os.path.dirname(__file__), '..', 'variable_fonts')
 
@@ -21,7 +23,7 @@ class VariableFontImgGenerator(BasedGenerator):
         self.strike = [True, False]  # зачеркивание
         self.underline = [True, False]  # подчеркивание
 
-    def draw_variable_font(self, text, font_path, image_size, font_size, weight, strike, underline):
+    def draw_font(self, text, font_path, image_size, font_size, weight, strike, underline):
         background = self.random_saturated_color(backcolor=True)
         image = Image.new('RGB', image_size, background)
         draw = ImageDraw.Draw(image)
@@ -48,7 +50,11 @@ class VariableFontImgGenerator(BasedGenerator):
             underline_position = (bbox[0], bbox[3] + 5)  # Положение линии под текстом (5 пикселей ниже)
             draw.line([bbox[0], underline_position[1], bbox[2], underline_position[1]], fill='black', width=2)
 
-        return image
+        size = random.randint(10, 40)
+        image = cv2.resize(np.array(image), (size, size), cv2.INTER_LANCZOS4)
+        image = cv2.resize(image, (40, 40), cv2.INTER_LANCZOS4)
+
+        return Image.fromarray(image.astype('uint8'), 'RGB')
 
     def generate_random_style(self):
         # случайная комбинация стилей
@@ -69,7 +75,7 @@ class VariableFontImgGenerator(BasedGenerator):
             for i in range(2):
                 text = StringGenerator.text_generator(lang)
 
-                image = self.draw_variable_font(text, font_path, self.image_size, self.font_size, weight,
+                image = self.draw_font(text, font_path, self.image_size, self.font_size, weight,
                                                 strike, underline)
                 images.append(image)
 
@@ -79,7 +85,7 @@ class VariableFontImgGenerator(BasedGenerator):
             images = []
             for i in range(2):
                 font_path, weight, strike, underline = self.generate_random_style()
-                image = self.draw_variable_font(text, font_path, self.image_size, self.font_size, weight,
+                image = self.draw_font(text, font_path, self.image_size, self.font_size, weight,
                                                 strike, underline)
                 images.append(image)
 
@@ -89,7 +95,7 @@ class VariableFontImgGenerator(BasedGenerator):
             for i in range(2):
                 font_path, weight, strike, underline = self.generate_random_style()
                 text = StringGenerator.text_generator(lang)
-                image = self.draw_variable_font(text, font_path, self.image_size, self.font_size, weight,
+                image = self.draw_font(text, font_path, self.image_size, self.font_size, weight,
                                                 strike, underline)
                 images.append(image)
 
