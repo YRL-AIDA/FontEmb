@@ -2,11 +2,12 @@ import os
 import random
 from PIL import Image, ImageDraw, ImageFont
 from .text_generator import StringGenerator
+from based_generator import BasedGenerator
 
 PATH_FONTS = os.path.join(os.path.dirname(__file__), '..', 'fonts')
 
 
-class FontImgGenerator:
+class FontImgGenerator(BasedGenerator):
     def __init__(self, size_img=(40, 40), font_size=35):
         self.fonts = [os.path.join(PATH_FONTS, name) for name in os.listdir(PATH_FONTS)]
 
@@ -17,20 +18,9 @@ class FontImgGenerator:
             (-3, 3)  # отклонение по высоте
         ]
 
-    def random_position_with_constraints(self):
-        # разделяем интервалы для ширины (x) и высоты (y)
-        x_interval, y_interval = self.intervals
-
-        # генерация случайной позиции по ширине
-        x = random.randint(x_interval[0], x_interval[1])
-
-        # генерация случайной позиции по высоте
-        y = random.randint(y_interval[0], y_interval[1])
-
-        return (x, y)
-
     def draw_font(self, text, font_path, image_size, font_size):
-        image = Image.new('RGB', image_size, 'white')  # изображение с белым фоном
+        background = self.random_saturated_color(backcolor=True)
+        image = Image.new('RGB', image_size, background)  # изображение с белым фоном
         draw = ImageDraw.Draw(image)
 
         font = ImageFont.truetype(font_path, font_size)
