@@ -2,7 +2,7 @@ import sys, os
 sys.path.append("..")
 import numpy as np
 from PIL import Image
-from model import  SubCharCNNClassifier
+from model_architecture.model import  SubCharCNNClassifier
 import torch
 from fine_tuning import BoldTask, image_to_gray
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
