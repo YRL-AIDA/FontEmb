@@ -1,6 +1,6 @@
 import sys, os
 sys.path.append("..")
-from model import SubCharCNNClassifier
+from model_architecture.model import SubCharCNNClassifier
 import torch
 import numpy as np
 from torch.nn import BCEWithLogitsLoss, Module, Linear, ReLU

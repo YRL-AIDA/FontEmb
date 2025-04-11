@@ -173,6 +173,8 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+train_dataset*
+test_dataset*
 dataset
 dataset1
 test
@@ -181,4 +183,4 @@ test2
 log.train.txt
 test_img.png
 *.pt
-
+result.txt
