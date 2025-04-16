@@ -13,9 +13,9 @@ import cv2
 device = torch.device('cuda:0' if torch.cuda.device_count() != 0 else 'cpu')
 # device = torch.device('cpu')
 
-class BoldTask(Module):
+class ItalicTask(Module):
     def __init__(self):
-        super(BoldTask, self).__init__()
+        super(ItalicTask, self).__init__()
         self.fc1 = Linear(8, 8)  
         self.fc2 = Linear(8, 1)  
         self.relu = ReLU()
@@ -77,11 +77,12 @@ def split_index_train_val(dataset, val_split=0.1, shuffle=True, seed=1234,batch_
     return batchs_train_indexs, batch_val_indexs   
 
 
-def validation(model_emb, model_bold, batch, optimizer, criterion):
-    return train_step(model_emb, model_bold, batch, optimizer, criterion, is_train=False)
+def validation(model_emb, model_italic, batch, optimizer, criterion):
+    return train_step(model_emb, model_italic
+, batch, optimizer, criterion, is_train=False)
 
 
-def train_step(model_emb, model_bold, batch, optimizer, criterion, is_train=True):
+def train_step(model_emb, model_italic, batch, optimizer, criterion, is_train=True):
     if is_train:
         optimizer.zero_grad()
     imgs = torch.cat([b[0].unsqueeze(0) for b in batch], dim=0).to(device)
@@ -90,7 +91,7 @@ def train_step(model_emb, model_bold, batch, optimizer, criterion, is_train=True
     font_emb_img = model_emb(imgs).to(device)  # (batch_size, 128)
 
     # выход 
-    bold = model_bold(font_emb_img).to(device)  # (batch_size, 1)
+    bold = model_italic(font_emb_img).to(device)  # (batch_size, 1)
 
     # Приводим метки к нужной форме
     targets = targets.view(-1, 1).to(device)  
@@ -101,20 +102,21 @@ def train_step(model_emb, model_bold, batch, optimizer, criterion, is_train=True
         optimizer.step()
     return loss.item()
 
-def train(model_emb, model_bold, dataset, optimizer, criterion, num_epochs, log_file, name_model):
+def train(model_emb, model_italic, dataset, optimizer, criterion, num_epochs, log_file, name_model):
     train_index, val_index = split_index_train_val(dataset, batch_size=32, shuffle=True)
-    with open(log_file, "a") as f:
-        f.write(f"START_LEANING {name_model}\n")
+    with open(log_file, "w") as f:
+        f.write("START_LEANING\n")
 
     top_loss = 1
 
     for epoch in range(num_epochs):
-        model_bold.train()
+        model_italic.train()
         running_loss = 0.0
 
         for i, (batch_index) in enumerate(train_index):
             batch= [dataset[j] for j in batch_index]
-            train_loss = train_step(model_emb, model_bold, batch, optimizer, criterion)
+            train_loss = train_step(model_emb, model_italic
+        , batch, optimizer, criterion)
             running_loss += train_loss
 
             if i % 10 == 9:
@@ -123,7 +125,8 @@ def train(model_emb, model_bold, dataset, optimizer, criterion, num_epochs, log_
         val_loss = 0.0
         for i, (batch_index) in enumerate(val_index):
             batch = [dataset[j] for j in batch_index]
-            val_loss += validation(model_emb, model_bold, batch, None, criterion)
+            val_loss += validation(model_emb, model_italic
+        , batch, None, criterion)
         val_loss = val_loss / len(val_index)
 
         if val_loss < top_loss:
@@ -132,23 +135,23 @@ def train(model_emb, model_bold, dataset, optimizer, criterion, num_epochs, log_
             if os.path.exists(name_model):
                 os.remove(name_model)
 
-            torch.save(model_bold.state_dict(), name_model)
+            torch.save(model_italic.state_dict(), name_model)
 
         with open(log_file, "a") as f:
             f.write(f"Epoch [{epoch + 1}/{num_epochs}], Loss: [train: {running_loss/len(train_index):.4f} / val: {val_loss: .4f} ] \n")
 
 if __name__ == "__main__":
     LOG_FILE = "log.train.txt"
-    MODEL_BOLD_FILE = "model_bold.pt"
+    MODEL_ITALIC__FILE =  "model_italic.pt"
     num_epochs = 100
     
     model_emb = SubCharCNNClassifier().to(device)
     model_emb.load_state_dict(torch.load(os.path.join("..", "model1.pt"), map_location=torch.device('cpu')))
     model_emb.eval()
 
-    model_bold = BoldTask().to(device)
+    model_italic = ItalicTask().to(device)
     
     criterion = BCEWithLogitsLoss().to(device) 
-    optimizer = optim.Adam(list(model_bold.parameters()), lr=0.0025)
+    optimizer = optim.Adam(list(model_italic.parameters()), lr=0.0025)
     dataset = CharImageDataset("dataset/")
-    train(model_emb, model_bold, dataset, optimizer, criterion, num_epochs, log_file=LOG_FILE,name_model=MODEL_BOLD_FILE)
+    train(model_emb, model_italic, dataset, optimizer, criterion, num_epochs, log_file=LOG_FILE, name_model=MODEL_ITALIC__FILE)

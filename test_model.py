@@ -10,7 +10,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 
 device = torch.device('cuda:0' if torch.cuda.device_count() != 0 else 'cpu')
 
-def test_model(model_cnn, model_diff, dataset, device,batch_size=10):
+def test_model(model_cnn, model_diff, dataset, device, batch_size=10):
     true_labels = []
     pred_labels = []
     len_dataset = len(dataset)
