@@ -180,7 +180,7 @@ dataset1
 test
 test1
 test2
-log.train.txt
+log.train*.txt
 test_img.png
 *.pt
 result.txt
