@@ -73,7 +73,7 @@ if __name__ == "__main__":
         "model_cnn": model_cnn(),
         "model_diff": ModelDiff(),
         "dataset": dataset,
-        "num_epochs": 20,
+        "num_epochs": 30,
         "batch_size": 256,
         "lr": 0.0005,
     }  for name_ds, dataset in datasets.items() for name_m, model_cnn in models_class.items() ] 

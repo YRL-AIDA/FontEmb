@@ -11,7 +11,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 if __name__ == '__main__':
     NAME_TRAIN_DATASET = "dataset"
     NAME_TEST_DATASET = "test"
-    create_dataset(NAME_TRAIN_DATASET,10000)
+    create_dataset(NAME_TRAIN_DATASET,5000)
     create_dataset(NAME_TEST_DATASET, 1000)
 
     train_dataset = CharImageDataset("dataset/")
@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     MODEL_EMB_FILE_SUBCHAR = os.path.join("..", "exp dataset_mixed sub_char_cnn_cnn.pt")
     MODEL_EMB_FILE_ARTICLE = os.path.join("..", "exp dataset_mixed article_cnn_cnn.pt")
-    num_epochs = 100
+    num_epochs = 30
     
 
     model_sub_char_cnn_emb = SubCharCNNClassifier().to(device)
@@ -53,7 +53,7 @@ if __name__ == '__main__':
 
 
         train(param["model_emb"], param["model_bold"], train_dataset, optimizer, criterion, 
-            num_epochs=100,  log_file=LOG_FILE, name_model=param["model_name"]+"_bold.pt",)
+            num_epochs=30,  log_file=LOG_FILE, name_model=param["model_name"]+"_bold.pt",)
 
 
         res = test_model(param["model_emb"], param["model_bold"], test_dataset, device)
