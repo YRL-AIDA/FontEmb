@@ -50,7 +50,8 @@ class VariableFontImgGenerator(BasedGenerator):
             underline_position = (bbox[0], bbox[3] + 5)  # Положение линии под текстом (5 пикселей ниже)
             draw.line([bbox[0], underline_position[1], bbox[2], underline_position[1]], fill='black', width=2)
 
-        size = random.randint(10, 40)
+        # size = random.randint(10, 40)
+        size = 40
         image = cv2.resize(np.array(image), (size, size), cv2.INTER_LANCZOS4)
         image = cv2.resize(image, (40, 40), cv2.INTER_LANCZOS4)
 
@@ -65,6 +66,25 @@ class VariableFontImgGenerator(BasedGenerator):
         underline = random.choice(self.underline)
         return font_path, weight, strike, underline
 
+    def generate_random_style1(self):
+        variants = [self.fonts, self.weights, self.strike, self.underline]  # 0 1 2 3 4 5 6 7
+        variant_choice = random.choice(variants)
+        result = []
+        for variant in variants:
+            if variant == variant_choice:
+                first_choice = random.choice(variant)
+                second_choice = random.choice(variant)
+                while second_choice == first_choice:
+                    second_choice = random.choice(variant)
+                result.append(first_choice)
+                result.append(second_choice)
+            else:
+                choice = random.choice(variant)
+                result.append(choice)
+                result.append(choice)
+                # font_path1, weight1, strike1, underline1, font_path2, weight2, strike2, underline2
+        return result[0], result[2], result[4], result[6], result[1], result[3], result[5], result[7]
+
     def generate_images(self, name_img, style=False, same_text=False):
         lang = random.choice(['rus', 'eng'])
 
@@ -76,28 +96,34 @@ class VariableFontImgGenerator(BasedGenerator):
                 text = StringGenerator.text_generator(lang)
 
                 image = self.draw_font(text, font_path, self.image_size, self.font_size, weight,
-                                                strike, underline)
+                                       strike, underline)
                 images.append(image)
 
         # одинаковый текст
         elif same_text:
             text = StringGenerator.text_generator(lang)
             images = []
-            for i in range(2):
-                font_path, weight, strike, underline = self.generate_random_style()
-                image = self.draw_font(text, font_path, self.image_size, self.font_size, weight,
-                                                strike, underline)
-                images.append(image)
+            font_path1, weight1, strike1, underline1, font_path2, weight2, strike2, underline2 = self.generate_random_style1()
+            image = self.draw_font(text, font_path1, self.image_size, self.font_size, weight1,
+                                   strike1, underline1)
+            images.append(image)
+            image = self.draw_font(text, font_path2, self.image_size, self.font_size, weight2,
+                                   strike2, underline2)
+            images.append(image)
+
 
         # все разное
         else:
+            text = StringGenerator.text_generator(lang)
             images = []
-            for i in range(2):
-                font_path, weight, strike, underline = self.generate_random_style()
-                text = StringGenerator.text_generator(lang)
-                image = self.draw_font(text, font_path, self.image_size, self.font_size, weight,
-                                                strike, underline)
-                images.append(image)
+            font_path1, weight1, strike1, underline1, font_path2, weight2, strike2, underline2 = self.generate_random_style1()
+            image = self.draw_font(text, font_path1, self.image_size, self.font_size, weight1,
+                                   strike1, underline1)
+            images.append(image)
+            text = StringGenerator.text_generator(lang)
+            image = self.draw_font(text, font_path2, self.image_size, self.font_size, weight2,
+                                   strike2, underline2)
+            images.append(image)
 
         final_image = Image.new('RGB', (images[0].width + images[1].width, images[1].height))
         final_image.paste(images[0], (0, 0))

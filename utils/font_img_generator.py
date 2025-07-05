@@ -31,7 +31,8 @@ class FontImgGenerator(BasedGenerator):
 
         draw.text(position, text, fill='black', font=font)
 
-        size = random.randint(10, 40)
+        # size = random.randint(10, 40)
+        size = 40
         image = cv2.resize(np.array(image), (size, size), cv2.INTER_LANCZOS4)
         image = cv2.resize(image, (40, 40), cv2.INTER_LANCZOS4)
 

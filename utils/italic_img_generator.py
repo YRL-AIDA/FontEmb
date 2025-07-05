@@ -51,7 +51,8 @@ class ItalicImgGenerator(BasedGenerator):
             underline_position = (bbox[0], bbox[3] + 5)  # Положение линии под текстом (5 пикселей ниже)
             draw.line([bbox[0], underline_position[1], bbox[2], underline_position[1]], fill='black', width=2)
 
-        size = random.randint(10, 40)
+        # size = random.randint(10, 40)
+        size = 40
         image = cv2.resize(np.array(image), (size, size), cv2.INTER_LANCZOS4)
         image = cv2.resize(image, (40, 40), cv2.INTER_LANCZOS4)
 

@@ -41,8 +41,8 @@ F1: {res["f1"]:.4f}
 
 if __name__ == "__main__":
     # Создание наборов
-    COUNT_TRAIN_IMAGES = 10000
-    COUNT_TEST_IMAGES = 1000
+    # COUNT_TRAIN_IMAGES = 100000
+    # COUNT_TEST_IMAGES = 1000
 
     dataset_train_base = "train_dataset_base"
     dataset_train_vrbl = "train_dataset_vrbl"
@@ -50,11 +50,11 @@ if __name__ == "__main__":
     dataset_test_base = "test_dataset_base"
     dataset_test_vrbl = "test_dataset_vrbl"
 
-    create_dataset(dataset_train_base, FontImgGenerator(), COUNT_TRAIN_IMAGES)
-    create_dataset(dataset_train_vrbl, VariableFontImgGenerator(), COUNT_TRAIN_IMAGES)
-
-    create_dataset(dataset_test_base, FontImgGenerator(), COUNT_TEST_IMAGES)
-    create_dataset(dataset_test_vrbl, VariableFontImgGenerator(), COUNT_TEST_IMAGES)
+    # create_dataset(dataset_train_base, FontImgGenerator(), COUNT_TRAIN_IMAGES)
+    # create_dataset(dataset_train_vrbl, VariableFontImgGenerator(), COUNT_TRAIN_IMAGES)
+    #
+    # create_dataset(dataset_test_base, FontImgGenerator(), COUNT_TEST_IMAGES)
+    # create_dataset(dataset_test_vrbl, VariableFontImgGenerator(), COUNT_TEST_IMAGES)
 
     dataset_base = CharImageDataset(dataset_train_base)
     dataset_vrbl = CharImageDataset(dataset_train_vrbl)

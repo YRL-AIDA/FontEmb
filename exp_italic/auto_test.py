@@ -11,8 +11,8 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 if __name__ == '__main__':
     NAME_TRAIN_DATASET = "dataset"
     NAME_TEST_DATASET = "test"
-    create_dataset(NAME_TRAIN_DATASET,5000)
-    create_dataset(NAME_TEST_DATASET, 1000)
+    # create_dataset(NAME_TRAIN_DATASET,5000)
+    # create_dataset(NAME_TEST_DATASET, 1000)
 
     train_dataset = CharImageDataset("dataset/")
     test_dataset = CharImageDataset("test/")
