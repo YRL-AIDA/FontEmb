@@ -16,11 +16,11 @@ class BasedGenerator(ABC):
 
         return (r, g, b) if not backcolor else (255 - r // 4, 255 - g // 4, 255 - b // 4)
 
-    def random_position_with_constraints(self):
-        x_interval, y_interval = self.intervals
-        x = random.randint(x_interval[0], x_interval[1])
-        y = random.randint(y_interval[0], y_interval[1])
-        return (x, y)
+    # def random_position_with_constraints(self):
+    #     x_interval, y_interval = self.intervals
+    #     x = random.randint(x_interval[0], x_interval[1])
+    #     y = random.randint(y_interval[0], y_interval[1])
+    #     return (x, y)
 
     @abstractmethod
     def draw_font(self):

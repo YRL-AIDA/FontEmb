@@ -11,7 +11,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 if __name__ == '__main__':
     NAME_TRAIN_DATASET = "dataset"
     NAME_TEST_DATASET = "test"
-    # create_dataset(NAME_TRAIN_DATASET,5000)
+    # create_dataset(NAME_TRAIN_DATASET,10000)
     # create_dataset(NAME_TEST_DATASET, 1000)
 
     train_dataset = CharImageDataset("dataset/")
@@ -19,8 +19,8 @@ if __name__ == '__main__':
 
     LOG_FILE = "log.train.txt"
 
-    MODEL_EMB_FILE_SUBCHAR = os.path.join("..", "exp dataset_mixed sub_char_cnn_cnn.pt")
-    MODEL_EMB_FILE_ARTICLE = os.path.join("..", "exp dataset_mixed article_cnn_cnn.pt")
+    MODEL_EMB_FILE_SUBCHAR = os.path.join("..", "exp dataset_vrbl sub_char_cnn_cnn.pt")
+    # MODEL_EMB_FILE_ARTICLE = os.path.join("..", "exp dataset_vrbl article_cnn_cnn.pt")
     num_epochs = 30
     
 
@@ -28,27 +28,27 @@ if __name__ == '__main__':
     model_sub_char_cnn_emb.load_state_dict(torch.load(MODEL_EMB_FILE_SUBCHAR, map_location=device))
     model_sub_char_cnn_emb.eval()
 
-    model_article_cnn_emb = ArticleCNNClassifier().to(device)
-    model_article_cnn_emb.load_state_dict(torch.load(MODEL_EMB_FILE_ARTICLE, map_location=device))
-    model_article_cnn_emb.eval()
+    # model_article_cnn_emb = ArticleCNNClassifier().to(device)
+    # model_article_cnn_emb.load_state_dict(torch.load(MODEL_EMB_FILE_ARTICLE, map_location=device))
+    # model_article_cnn_emb.eval()
 
     models_emb = [{
                     "model_name": "sub_char",
                     "model_emb": model_sub_char_cnn_emb,
                     "model_italic": ItalicTask().to(device),
                     "path_model": MODEL_EMB_FILE_SUBCHAR
-                  }, 
-                  {
-                    "model_name": "article",
-                    "model_italic": ItalicTask().to(device),
-                    "model_emb": model_article_cnn_emb,
-                    "path_model": MODEL_EMB_FILE_ARTICLE
+                  # },
+                  # {
+                  #   "model_name": "article",
+                  #   "model_italic": ItalicTask().to(device),
+                  #   "model_emb": model_article_cnn_emb,
+                  #   "path_model": MODEL_EMB_FILE_ARTICLE
                   }
     ]
     
     for param in models_emb:
         criterion = BCEWithLogitsLoss().to(device) 
-        optimizer = optim.Adam(list(param["model_italic"].parameters()), lr=0.0025)
+        optimizer = optim.Adam(list(param["model_italic"].parameters()), lr=0.0005)
         
 
 

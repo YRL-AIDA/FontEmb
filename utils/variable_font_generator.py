@@ -14,10 +14,10 @@ class VariableFontImgGenerator(BasedGenerator):
         self.fonts = [os.path.join(PATH_FONTS, name) for name in os.listdir(PATH_FONTS)]
         self.image_size = size_img
         self.font_size = font_size
-        self.intervals = [
-            (-3, 3),  # отклонение по ширине
-            (-3, 3)  # отклонение по высоте
-        ]
+        # self.intervals = [
+        #     (-3, 3),  # отклонение по ширине
+        #     (-3, 3)  # отклонение по высоте
+        # ]
 
         self.weights = [400, 800]  # жирность
         self.strike = [True, False]  # зачеркивание
@@ -30,25 +30,29 @@ class VariableFontImgGenerator(BasedGenerator):
 
         font = ImageFont.truetype(font_path, font_size)
 
-        # жирность
         if hasattr(font, 'set_variation_by_axes'):
             font.set_variation_by_axes([weight])
 
-        position = self.random_position_with_constraints()
+        left, top, right, bottom = draw.textbbox((0, 0), text, font=font)
+        text_width = right - left
+        text_height = bottom - top
 
-        bbox = draw.textbbox(position, text, font=font)
+        x = (image_size[0] - text_width) // 2 - left
+        y = (image_size[1] - text_height) // 2 - top
 
-        draw.text(position, text, fill='black', font=font)
+        draw.text((x, y), text, fill='black', font=font)
+
+        bbox = draw.textbbox((x, y), text, font=font)
 
         # зачеркивание текста
         if strike:
-            strike_position = (bbox[0], (bbox[1] + bbox[3]) // 2)
-            draw.line([bbox[0], strike_position[1], bbox[2], strike_position[1]], fill='black', width=2)
+            mid_y = (bbox[1] + bbox[3]) // 2
+            draw.line([bbox[0], mid_y, bbox[2], mid_y], fill='black', width=1)
 
         # подчеркивание текста
         if underline:
-            underline_position = (bbox[0], bbox[3] + 5)  # Положение линии под текстом (5 пикселей ниже)
-            draw.line([bbox[0], underline_position[1], bbox[2], underline_position[1]], fill='black', width=2)
+            underline_y = bbox[3] + 1
+            draw.line([bbox[0], underline_y, bbox[2], underline_y], fill='black', width=1)
 
         # size = random.randint(10, 40)
         size = 40

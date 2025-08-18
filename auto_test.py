@@ -56,17 +56,21 @@ if __name__ == "__main__":
     # create_dataset(dataset_test_base, FontImgGenerator(), COUNT_TEST_IMAGES)
     # create_dataset(dataset_test_vrbl, VariableFontImgGenerator(), COUNT_TEST_IMAGES)
 
-    dataset_base = CharImageDataset(dataset_train_base)
+    # dataset_base = CharImageDataset(dataset_train_base)
     dataset_vrbl = CharImageDataset(dataset_train_vrbl)
-    dataset_mixed = MultiDirCharImageDataset([dataset_train_base, dataset_train_vrbl])
+    # dataset_mixed = MultiDirCharImageDataset([dataset_train_base, dataset_train_vrbl])
 
     test_base = CharImageDataset(dataset_test_base)
     test_vrbl = CharImageDataset(dataset_test_vrbl)
     test_mixed = MultiDirCharImageDataset([dataset_test_base, dataset_test_vrbl])
 
 
-    datasets = {"dataset_base": dataset_base, "dataset_vrbl": dataset_vrbl, "dataset_mixed": dataset_mixed}
-    models_class = {"sub_char_cnn": SubCharCNNClassifier, "article_cnn": ArticleCNNClassifier}
+    # datasets = {"dataset_base": dataset_base, "dataset_vrbl": dataset_vrbl, "dataset_mixed": dataset_mixed}
+    # models_class = {"sub_char_cnn": SubCharCNNClassifier, "article_cnn": ArticleCNNClassifier}
+
+    datasets = {"dataset_vrbl": dataset_vrbl}
+    models_class = {"sub_char_cnn": SubCharCNNClassifier}
+
     exps = [
     {
         "name": "exp" + " " + name_ds + " " + name_m,

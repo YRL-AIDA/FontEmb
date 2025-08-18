@@ -15,10 +15,10 @@ class FontImgGenerator(BasedGenerator):
 
         self.image_size = size_img
         self.font_size = font_size
-        self.intervals = [
-            (-3, 3),  # отклонение по ширине
-            (-3, 3)  # отклонение по высоте
-        ]
+        # self.intervals = [
+        #     (-3, 3),  # отклонение по ширине
+        #     (-3, 3)  # отклонение по высоте
+        # ]
 
     def draw_font(self, text, font_path, image_size, font_size):
         background = self.random_saturated_color(backcolor=True)
@@ -27,9 +27,14 @@ class FontImgGenerator(BasedGenerator):
 
         font = ImageFont.truetype(font_path, font_size)
 
-        position = self.random_position_with_constraints()
+        left, top, right, bottom = draw.textbbox((0, 0), text, font=font)
+        text_width = right - left
+        text_height = bottom - top
 
-        draw.text(position, text, fill='black', font=font)
+        x = (image_size[0] - text_width) // 2 - left
+        y = (image_size[1] - text_height) // 2 - top
+
+        draw.text((x, y), text, fill='black', font=font)
 
         # size = random.randint(10, 40)
         size = 40
