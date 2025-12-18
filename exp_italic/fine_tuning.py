@@ -8,6 +8,7 @@ from torch.nn import BCEWithLogitsLoss, Module, Linear, ReLU
 from torch import optim
 from torch.utils.data  import Dataset
 from PIL import Image
+from torchvision import transforms
 import cv2
 
 device = torch.device('cuda:0' if torch.cuda.device_count() != 0 else 'cpu')
@@ -16,7 +17,7 @@ device = torch.device('cuda:0' if torch.cuda.device_count() != 0 else 'cpu')
 class ItalicTask(Module):
     def __init__(self):
         super(ItalicTask, self).__init__()
-        self.fc1 = Linear(8, 8)  
+        self.fc1 = Linear(8, 8)
         self.fc2 = Linear(8, 1)  
         self.relu = ReLU()
 
@@ -35,13 +36,14 @@ def image_to_gray(image):
     return np.array(grayscale_image)
 
 class CharImageDataset(Dataset):
-    def __init__(self, img_dir, transform=image_to_gray, target_transform=label_to_vec):
+    def __init__(self, img_dir, target_transform=label_to_vec, transform=image_to_gray):
         self.img_dir = img_dir
         self.labels = ['0', '1']
         self.counts = [len(os.listdir(os.path.join(self.img_dir, label))) for label in self.labels]
         self.count = sum(self.counts)
-        self.transform = transform
         self.target_transform = target_transform
+        self.transform = transform
+
 
     def __len__(self):
         return self.count
@@ -50,7 +52,7 @@ class CharImageDataset(Dataset):
         label, i = self.__get_label_and_i_from_idx(idx)
         img_path = os.path.join(self.img_dir, label, f"image_{i}.png")
         image = np.array(Image.open(img_path))
-        if  self.transform:
+        if self.transform:
             image = self.transform(image)
         if self.target_transform:
             label = self.target_transform(label)

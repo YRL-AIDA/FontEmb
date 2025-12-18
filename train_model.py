@@ -98,4 +98,4 @@ if __name__ == "__main__":
     dataset = CharImageDataset('train_dataset')
     optimizer = optim.Adam(list(model_cnn.parameters()) + list(model_diff.parameters()), lr=0.001)
     criterion = BCEWithLogitsLoss()
-    train(optimizer, criterion, dataset, model_cnn, model_diff, num_epochs=20, batch_size=8, name="sub_char", device=device)
+    train(optimizer, criterion, dataset, model_cnn, model_diff, num_epochs=30, batch_size=128, name="sub_char", device=device)

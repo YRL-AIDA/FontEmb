@@ -3,8 +3,9 @@ sys.path.append("..")
 import numpy as np
 from PIL import Image
 from model_architecture.model import  SubCharCNNClassifier
+from model_architecture.contrastive_model import SimCLRModel
 import torch
-from fine_tuning import BoldTask, image_to_gray, CharImageDataset
+from fine_tuning import BoldTask, CharImageDataset
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 device = torch.device('cuda:0' if torch.cuda.device_count() != 0 else 'cpu')
@@ -43,10 +44,10 @@ def test_model(model_emb, model_bold, dataset, device, batch_size=10):
 
 
 if __name__ == "__main__":
-    name_model_emb = os.path.join("..", "model.pt")
-    name_bold_model = "model_bold.pt"
+    name_model_emb = os.path.join("..", "contrastive_model.pt")
+    name_bold_model = "contrastive_model_bold.pt"
 
-    model_emb= SubCharCNNClassifier().to(device)
+    model_emb = SimCLRModel().to(device)
     model_emb.load_state_dict(torch.load(name_model_emb, map_location=device))
     model_emb.eval()
 

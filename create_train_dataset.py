@@ -20,7 +20,7 @@ def create_dataset(name_dataset, generator, count):
         generator.generate_images(os.path.join(path_1, f'image_{i}.png'), style=True)
 
 if __name__ == '__main__':
-    COUNT_IMAGES = 100
+    COUNT_IMAGES = 100000
     font_generator = FontImgGenerator()
     create_dataset('train_dataset_', font_generator, COUNT_IMAGES)
 

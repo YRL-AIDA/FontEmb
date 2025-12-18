@@ -86,29 +86,16 @@ class ContrastiveVariableFontGenerator(BasedGenerator):
         image = self.draw_font(text, font_path, self.image_size, self.font_size, weight,
                                    strike, underline)
         image.save(f'{name_img}_{"1" if "italic" in font_path else "0"}_{a[weight]}_{a[strike]}_{a[underline]}.png')
-        
+
     def generate_contrastive_styles(self):
         font_styles = list(itertools.product(self.fonts, self.weights, self.strike, self.underline))
         langs = ['rus', 'eng']
         for lang in langs:
             for i, style in enumerate(font_styles):
                 text = StringGenerator.contrastive_text_generator(lang)
-                image = self.draw_font(text, style[0], self.image_size, self.font_size, style[1],style[2], style[3])
+                image = self.draw_font(text, style[0], self.image_size, self.font_size, style[1], style[2], style[3])
                 image.save(f'contr_dataset/image_{i}_{lang}.png')
 
-
-
-# self.fonts = [os.path.join(PATH_FONTS, name) for name in os.listdir(PATH_FONTS)]
-#         self.image_size = size_img
-#         self.font_size = font_size
-#         # self.intervals = [
-#         #     (-3, 3),  # отклонение по ширине
-#         #     (-3, 3)  # отклонение по высоте
-#         # ]
-
-#         self.weights = [400, 800]  # жирность
-#         self.strike = [True, False]  # зачеркивание
-#         self.underline = [True, False]  # подчеркивание
 
 # Проверка
 # generator = ContrastiveVariableFontGenerator()
