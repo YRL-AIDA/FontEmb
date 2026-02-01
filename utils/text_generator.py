@@ -1,5 +1,6 @@
 import random
 
+
 class StringGenerator:
 
     alphabet_rus_small = 'абвгдеёжзийклмопрстфхцшщьыъэюя'
@@ -48,6 +49,11 @@ class StringGenerator:
         elif lang == 'eng':
             for i in range(1000):
                 string += random.choice([random.choice(alphabet_eng_small), random.choice(alphabet_eng_small), random.choice(alphabet_eng_big)])
+        elif lang == 'all':
+            for i in range(1000):
+                string += random.choice([random.choice(alphabet_rus_small), random.choice(alphabet_rus_small), random.choice(alphabet_rus_big),
+                                         random.choice(alphabet_eng_small), random.choice(alphabet_eng_small), random.choice(alphabet_eng_big),
+                                         str(random.randint(0, 9))])
         return string
 
 

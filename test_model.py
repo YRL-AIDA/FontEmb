@@ -2,8 +2,7 @@ import numpy as np
 from PIL import Image
 from model_architecture.model import ModelDiff, SubCharCNNClassifier
 from model_architecture.article_model import ArticleCNNClassifier
-from dataset_class import CharImageDataset 
-from dataset_class import image_to_gray
+from dataset_class import CharImageDataset
 import torch
 import os
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score

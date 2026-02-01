@@ -22,6 +22,3 @@ class BasedGenerator(ABC):
     #     y = random.randint(y_interval[0], y_interval[1])
     #     return (x, y)
 
-    @abstractmethod
-    def draw_font(self):
-        pass

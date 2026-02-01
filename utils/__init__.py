@@ -4,3 +4,5 @@ from .variable_font_generator import VariableFontImgGenerator
 from .bold_img_generator import BoldImgGenerator
 from .italic_img_generator import ItalicImgGenerator
 from .contr_vrbl_generator import ContrastiveVariableFontGenerator
+from .common_generator import CommonGenerator
+from .panose_vector import PanoseVector

@@ -6,14 +6,14 @@ class SubCharCNNClassifier(nn.Module):
         super(SubCharCNNClassifier, self).__init__()
         
         # сверточные слои
-        self.conv1 = nn.Conv2d(in_channels=1, out_channels=16, kernel_size=30, stride=1, padding=14)
-        self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=30, stride=1, padding=14)
+        self.conv1 = nn.Conv2d(in_channels=1, out_channels=16, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=1)
 
         # максимальный пулинг
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
 
         # полносвязный слой
-        self.fc1 = nn.Linear(32 * 9 * 9, 64)
+        self.fc1 = nn.Linear(32 * 10 * 10, 64)
         self.fc2 = nn.Linear(64, 8)
 
         # функция активации
